@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  pre-frontend:
+    build: .
+    container_name: pre-realestate-frontend
+    image: pre-realestate-frontend
+    restart: always
+    hostname: pre-realestate-frontend
+    ports:
+      - "5174:5173"
+    environment:
+      - VITE_API_URL=https://preapi.realinvesto.com/api
+      - VITE_BACKEND_URL=https://preapi.realinvesto.com
+      - FILESYSTEM_DISK=public
+
+      - VITE_STRIPE_PUBLIC_KEY=pk_test_51RQufrD8Z2NgLaVqMEN48lNGkBAJkCljTGEzPQhyxUJirZLH2dnnIyGyxXvWQSD4F3wkNNVjpZtIaQ8QHOHpWEtw00UdXK1a8o
+      - VITE_STRIPE_SECRET_KEY=sk_test_51RQufrD8Z2NgLaVq0UOJBqBREhtJsnZ2lsBQAC1jVv3VBGzLP51URQeLtecWYxqOiuzQ95GT5S6CkjuHtQLPciyZ00hAAFdrxw
+
+      - VITE_BACKEND_URL=http://127.0.0.1:8001
+      - VITE_REVERB_HOST=127.0.0.1
+      - VITE_REVERB_PORT=8080
+      - VITE_REVERB_APP_KEY=vch3gbbqqmmili5ymlnd
+
+      - MY_BRANCH=dev-phase-B2
+      - VITE_APP_NAME=RealInvesto
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - pre-realestate-network
+
+networks:
+  pre-realestate-network:
+    name: pre-realestate-network
+    driver: bridge
+
