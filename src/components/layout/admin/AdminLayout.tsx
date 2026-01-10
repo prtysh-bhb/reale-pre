@@ -11,7 +11,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-950 overflow-hidden">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Sidebar */}
       <AdminSidebar
         collapsed={collapsed}
@@ -22,16 +22,18 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
       {/* Main Content Area */}
       <div
-        className={`flex flex-col flex-1 transition-all duration-200 ${
-          collapsed ? "lg:pl-20" : "lg:pl-64"
+        className={`flex flex-col flex-1 min-h-screen transition-all duration-300 ease-in-out ${
+          collapsed ? "lg:pl-[72px]" : "lg:pl-64"
         }`}
       >
         {/* Header */}
         <Header onMenuClick={() => setMobileOpen(true)} />
 
         {/* Scrollable Page Content */}
-        <main className="flex-1 overflow-y-auto p-3 lg:px-6 py-5">
-          {children}
+        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+          <div className="max-w-[1600px] mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Home,
@@ -16,8 +16,8 @@ import {
   List,
   Building2,
   ChevronDown,
-  ChevronRight,
-  Menu,
+  PanelLeftClose,
+  PanelLeft,
   X,
   ClipboardList,
   CreditCard,
@@ -29,15 +29,11 @@ import {
   Coins,
   Wallet,
   Brain,
-  MessageCircleQuestionMark,
+  MessageCircleQuestion,
   ScrollText,
-  Layers,
-  Cookie,
-  Shield,
-  Info,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { cn } from "@/lib/utils";
 
 interface AdminSidebarProps {
   collapsed?: boolean;
@@ -53,314 +49,139 @@ const AdminSidebar = ({
   onMobileToggle,
 }: AdminSidebarProps) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const location = useLocation();
 
   const toggleDropdown = (menu: string) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
-  // 🧠 Get logged-in user and role
-  const {user} = useAuth();
+  const { user } = useAuth();
   const role = user?.role || "admin";
-  const userId = user?.id || ""; // use this to build dynamic routes for agents/customers
+  const userId = user?.id || "";
 
-  // ===============================
-  // ROLE-BASED MENU ITEMS
-  // ===============================
-const menuItems =
-  role === "admin"
-    ? [
-        {
-          name: "Dashboard",
-          icon: LayoutDashboard,
-          path: "/admin/dashboard",
-          exact: true,
-        },
-        {
-          name: "Analytics",
-          icon: GalleryVerticalEnd,
-          path: "/admin/analytics",
-          exact: true,
-        },
-        {
-          name: "Properties",
-          icon: Home,
-          children: [
-            {
-              name: "All Properties",
-              icon: List,
-              path: "/admin/properties",
-              exact: true,
-            },
-            {
-              name: "Property Stats",
-              icon: Building2,
-              path: "/admin/properties/stats",
-              exact: true,
-            },
-          ],
-        },
-        {
-          name: "Agents",
-          icon: Users,
-          children: [
-            {
-              name: "Agents List",
-              icon: List,
-              path: "/admin/agents",
-              exact: true,
-            },
-            {
-              name: "Add Agent",
-              icon: PlusCircle,
-              path: "/admin/agents/new",
-              exact: true,
-            },
-          ],
-        },
-        {
-          name: "Customers",
-          icon: Contact,
-          children: [
-            {
-              name: "Customers List",
-              icon: List,
-              path: "/admin/customers",
-              exact: true,
-            },
-            {
-              name: "Add Customer",
-              icon: PlusCircle,
-              path: "/admin/customers/new",
-              exact: true,
-            },
-          ],
-        },
-        {
-          name: "Subscriptions",
-          icon: CreditCard,
-          children: [
-            {
-              name: "Subscription List",
-              icon: List,
-              path: "/admin/subscriptions",
-              exact: true,
-            },
-            {
-              name: "Add Subscription",
-              icon: PlusCircle,
-              path: "/admin/subscriptions/new",
-              exact: true,
-            },
-          ],
-        },
-        {
-          name: "Credit",
-          icon: Coins,
-          children: [
-            {
-              name: "Credit Packages",
-              icon: List,
-              path: "/admin/credit",
-              exact: true,
-            },
-             {
-              name: "Wallet",
-              icon: Wallet,
-              path: "/admin/wallet",
-              exact: true,
-            },
-          ],
-        },
-        {
-          name: "CMS",
-          icon: MonitorCog,
-          children: [
-            {
-              name: "FAQs",
-              icon: MessageCircleQuestionMark,
-              path: "/admin/cms/faqs",
-              exact: true,
-            },
-            {
-              name: "Blog Categories",
-              icon: Blocks,
-              path: "/admin/cms/blog-categories",
-              exact: true,
-            },
-            {
-              name: "Blogs",
-              icon: GalleryVerticalEnd,
-              path: "/admin/cms/blogs",
-              exact: true,
-            },
-            {
-              name: "News",
-              icon: Newspaper,
-              path: "/admin/cms/news",
-              exact: true,
-            },
-          ],
-        },
-        
-        {
-          name: "Pages",
-          icon: ScrollText,
-          path: "/admin/pages",
-          exact: true,
-        },
-        {
-          name: "Transactions",
-          icon: ArrowLeftRight,
-          children: [
-            {
-              name: "Agents",
-              icon: Users,
-              path: "/admin/transactions/agents",
-              exact: true,
-            },
-            {
-              name: "Customers",
-              icon: Contact,
-              path: "/admin/transactions/customers",
-              exact: true,
-            },
-          ],
-        },
-        { name: "Ai Chat Leads", icon: Brain, path: "/admin/aichatleads", exact: true },
-        { name: "Orders", icon: HousePlus, path: "/admin/orders", exact: true },
-        { name: "Inbox", icon: MailOpen, path: "/admin/inbox", exact: true },
-        // { name: "Chat*", icon: MessageCircle, path: "/admin/chat", exact: true },
-        {
-          name: "Reviews",
-          icon: MessageSquare,
-          path: "/admin/reviews",
-          exact: true,
-        },
-        {
-          name: "Settings",
-          icon: Settings,
-          path: "/admin/settings",
-          exact: true,
-        },
-      ]
-    : role === "agent"
-    ? [
-        {
-          name: "Dashboard",
-          icon: LayoutDashboard,
-          path: "/agent/dashboard",
-          exact: true,
-        },
-        {
-          name: "My Properties",
-          icon: Home,
-          children: [
-            {
-              name: "Property List",
-              icon: List,
-              path: `/agent/properties`,
-              exact: true,
-            },
-            {
-              name: "Add Property",
-              icon: PlusCircle,
-              path: `/agent/properties/new`,
-              exact: true,
-            },
-          ],
-        },
-        // {
-        //   name: "Customers*",
-        //   icon: Contact,
-        //   children: [
-        //     {
-        //       name: "Customer List*",
-        //       icon: List,
-        //       path: "/agent/customers",
-        //       exact: true,
-        //     },
-        //     {
-        //       name: "Add Customer*",
-        //       icon: PlusCircle,
-        //       path: "/agent/customers/new",
-        //       exact: true,
-        //     },
-        //   ],
-        // },
-        {
-          name: "Leads",
-          icon: ClipboardList,
-          path: "/agent/leads",
-          exact: false,
-        },
-        {
-          name: "Ai Price Estimate",
-          icon: Brain,
-          path: "/agent/ai-price-estimate",
-          exact: false,
-        },
-        {
-          name: "CMS",
-          icon: MonitorCog,
-          children: [
-            {
-              name: "Blogs",
-              icon: List,
-              path: "/agent/blogs",
-              exact: true,
-            },
-            {
-              name: "Comments",
-              icon: MessageCircle,
-              path: "/agent/comments",
-              exact: true,
-            },
-          ],
-        },
-        { name: "Appointment", icon: HousePlus, path: "/agent/appointments", exact: true },
-        { name: "Reminders", icon: Bell, path: "/agent/reminders", exact: true },
-        { name: "Inbox", icon: MailOpen, path: "/admin/inbox", exact: true },
-        { name: "Chat", icon: MessageCircle, path: "/agent/chat", exact: true },
-        {
-          name: "Settings",
-          icon: Settings,
-          path: "/admin/settings",
-          exact: true,
-        },
-      ]
-    : [
-        {
-          name: "Dashboard",
-          icon: LayoutDashboard,
-          path: "/admin/dashboard",
-          exact: true,
-        },
-        {
-          name: "My Properties",
-          icon: Home,
-          children: [
-            {
-              name: "Property List",
-              icon: Building2,
-              path: `/admin/customers/${userId}/properties`,
-              exact: false,
-            },
-          ],
-        },
-        { name: "Inbox", icon: MailOpen, path: "/admin/inbox", exact: true },
-        { name: "Chat", icon: MessageCircle, path: "/admin/chat", exact: true },
-        {
-          name: "Settings",
-          icon: Settings,
-          path: "/admin/settings",
-          exact: true,
-        },
-      ];
+  // Role-based menu configuration
+  const menuItems =
+    role === "admin"
+      ? [
+          {
+            name: "Dashboard",
+            icon: LayoutDashboard,
+            path: "/admin/dashboard",
+            exact: true,
+          },
+          {
+            name: "Analytics",
+            icon: GalleryVerticalEnd,
+            path: "/admin/analytics",
+            exact: true,
+          },
+          {
+            name: "Properties",
+            icon: Home,
+            children: [
+              { name: "All Properties", icon: List, path: "/admin/properties", exact: true },
+              { name: "Property Stats", icon: Building2, path: "/admin/properties/stats", exact: true },
+            ],
+          },
+          {
+            name: "Agents",
+            icon: Users,
+            children: [
+              { name: "Agents List", icon: List, path: "/admin/agents", exact: true },
+              { name: "Add Agent", icon: PlusCircle, path: "/admin/agents/new", exact: true },
+            ],
+          },
+          {
+            name: "Customers",
+            icon: Contact,
+            children: [
+              { name: "Customers List", icon: List, path: "/admin/customers", exact: true },
+              { name: "Add Customer", icon: PlusCircle, path: "/admin/customers/new", exact: true },
+            ],
+          },
+          {
+            name: "Subscriptions",
+            icon: CreditCard,
+            children: [
+              { name: "Subscription List", icon: List, path: "/admin/subscriptions", exact: true },
+              { name: "Add Subscription", icon: PlusCircle, path: "/admin/subscriptions/new", exact: true },
+            ],
+          },
+          {
+            name: "Credit",
+            icon: Coins,
+            children: [
+              { name: "Credit Packages", icon: List, path: "/admin/credit", exact: true },
+              { name: "Wallet", icon: Wallet, path: "/admin/wallet", exact: true },
+            ],
+          },
+          {
+            name: "CMS",
+            icon: MonitorCog,
+            children: [
+              { name: "FAQs", icon: MessageCircleQuestion, path: "/admin/cms/faqs", exact: true },
+              { name: "Blog Categories", icon: Blocks, path: "/admin/cms/blog-categories", exact: true },
+              { name: "Blogs", icon: GalleryVerticalEnd, path: "/admin/cms/blogs", exact: true },
+              { name: "News", icon: Newspaper, path: "/admin/cms/news", exact: true },
+            ],
+          },
+          { name: "Pages", icon: ScrollText, path: "/admin/pages", exact: true },
+          {
+            name: "Transactions",
+            icon: ArrowLeftRight,
+            children: [
+              { name: "Agents", icon: Users, path: "/admin/transactions/agents", exact: true },
+              { name: "Customers", icon: Contact, path: "/admin/transactions/customers", exact: true },
+            ],
+          },
+          { name: "AI Chat Leads", icon: Brain, path: "/admin/aichatleads", exact: true },
+          { name: "Orders", icon: HousePlus, path: "/admin/orders", exact: true },
+          { name: "Inbox", icon: MailOpen, path: "/admin/inbox", exact: true },
+          { name: "Reviews", icon: MessageSquare, path: "/admin/reviews", exact: true },
+          { name: "Settings", icon: Settings, path: "/admin/settings", exact: true },
+        ]
+      : role === "agent"
+      ? [
+          { name: "Dashboard", icon: LayoutDashboard, path: "/agent/dashboard", exact: true },
+          {
+            name: "My Properties",
+            icon: Home,
+            children: [
+              { name: "Property List", icon: List, path: `/agent/properties`, exact: true },
+              { name: "Add Property", icon: PlusCircle, path: `/agent/properties/new`, exact: true },
+            ],
+          },
+          { name: "Leads", icon: ClipboardList, path: "/agent/leads", exact: false },
+          { name: "AI Price Estimate", icon: Brain, path: "/agent/ai-price-estimate", exact: false },
+          {
+            name: "CMS",
+            icon: MonitorCog,
+            children: [
+              { name: "Blogs", icon: List, path: "/agent/blogs", exact: true },
+              { name: "Comments", icon: MessageCircle, path: "/agent/comments", exact: true },
+            ],
+          },
+          { name: "Appointments", icon: HousePlus, path: "/agent/appointments", exact: true },
+          { name: "Reminders", icon: Bell, path: "/agent/reminders", exact: true },
+          { name: "Inbox", icon: MailOpen, path: "/admin/inbox", exact: true },
+          { name: "Chat", icon: MessageCircle, path: "/agent/chat", exact: true },
+          { name: "Settings", icon: Settings, path: "/admin/settings", exact: true },
+        ]
+      : [
+          { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard", exact: true },
+          {
+            name: "My Properties",
+            icon: Home,
+            children: [
+              { name: "Property List", icon: Building2, path: `/admin/customers/${userId}/properties`, exact: false },
+            ],
+          },
+          { name: "Inbox", icon: MailOpen, path: "/admin/inbox", exact: true },
+          { name: "Chat", icon: MessageCircle, path: "/admin/chat", exact: true },
+          { name: "Settings", icon: Settings, path: "/admin/settings", exact: true },
+        ];
 
-
-  // ===============================
   // Keep dropdown open for active route
-  // ===============================
   useEffect(() => {
     for (const item of menuItems) {
       if (item.children) {
@@ -373,91 +194,97 @@ const menuItems =
         }
       }
     }
-    setOpenDropdown(null);
   }, [location.pathname]);
 
-  // ===============================
-  // Render Sidebar
-  // ===============================
   return (
     <>
       <aside
-        className={`fixed top-0 left-0 h-screen flex flex-col bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 shadow-2xl border-r border-blue-500/20 z-50 transition-all duration-200
-        ${collapsed ? "w-20" : "w-64"}
-        ${mobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+        className={cn(
+          "fixed top-0 left-0 h-screen flex flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-50 transition-all duration-300 ease-in-out",
+          collapsed ? "w-[72px]" : "w-64",
+          mobileOpen ? "translate-x-0" : "-translate-x-full",
+          "lg:translate-x-0"
+        )}
       >
-        {/* Header Section with Logo */}
-        <div className="relative px-4 py-6 border-b border-blue-500/20">
-          {/* Decorative gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-emerald-500/10 to-blue-500/10 pointer-events-none"></div>
-
-          <div className="relative flex items-center justify-between">
-            {!collapsed && (
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent drop-shadow-lg">
-                  {role === "admin"
-                    ? "Admin"
-                    : role === "agent"
-                    ? "Agent"
-                    : "Customer"}
-                </h1>
-                <p className="text-xs text-gray-400 capitalize mt-1 font-medium">
-                  {role} Dashboard
-                </p>
+        {/* Header */}
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-800">
+          {!collapsed && (
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-white" />
               </div>
-            )}
-            <div className="grid gap-1">
-              <button
-                onClick={() => onCollapseChange?.(!collapsed)}
-                className="text-gray-400 hover:text-emerald-400 transition-all cursor-pointer p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
-              >
-                <Menu size={18} />
-              </button>
-              <button
-                onClick={() => onMobileToggle?.(false)}
-                className="lg:hidden text-gray-400 hover:text-emerald-400 transition-all p-2 rounded-lg hover:bg-white/10 backdrop-blur-sm"
-              >
-                <X size={18} />
-              </button>
+              <div>
+                <h1 className="text-sm font-bold text-gray-900 dark:text-white">
+                  {role === "admin" ? "Admin Panel" : role === "agent" ? "Agent Panel" : "Dashboard"}
+                </h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{role}</p>
+              </div>
             </div>
+          )}
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => onCollapseChange?.(!collapsed)}
+              className="hidden lg:flex p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {collapsed ? <PanelLeft size={18} /> : <PanelLeftClose size={18} />}
+            </button>
+            <button
+              onClick={() => onMobileToggle?.(false)}
+              className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <X size={18} />
+            </button>
           </div>
         </div>
 
-        {/* Menu Items */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1 scrollbar-thin scrollbar-thumb-blue-500/30 scrollbar-track-transparent">
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto p-3 space-y-1">
           {menuItems.map((item) => (
             <div key={item.name}>
               {item.children ? (
                 <>
                   <button
                     onClick={() => toggleDropdown(item.name)}
-                    className={`group flex items-center justify-between w-full px-4 py-3 rounded-xl hover:bg-white/10 backdrop-blur-sm transition-all text-gray-300 cursor-pointer text-sm ${
-                      collapsed ? "justify-center" : ""
-                    } ${openDropdown === item.name ? "bg-white/10 text-white border border-blue-500/30" : ""}`}
+                    className={cn(
+                      "group flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                      collapsed ? "justify-center" : "",
+                      openDropdown === item.name
+                        ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                    )}
                   >
                     <div className="flex items-center gap-3">
-                      <item.icon size={18} className={openDropdown === item.name ? "text-emerald-400" : "text-gray-400"} />
-                      {!collapsed && <span className="font-medium">{item.name}</span>}
+                      <item.icon size={18} className={openDropdown === item.name ? "text-primary-500" : ""} />
+                      {!collapsed && <span>{item.name}</span>}
                     </div>
-                    {!collapsed &&
-                      (openDropdown === item.name ? (
-                        <ChevronDown size={16} className="text-emerald-400" />
-                      ) : (
-                        <ChevronRight size={16} className="text-gray-500" />
-                      ))}
+                    {!collapsed && (
+                      <ChevronDown
+                        size={16}
+                        className={cn(
+                          "transition-transform duration-200",
+                          openDropdown === item.name ? "rotate-180" : ""
+                        )}
+                      />
+                    )}
                   </button>
 
                   {!collapsed && openDropdown === item.name && (
-                    <div className="ml-6 mt-2 space-y-1 p-2 bg-black/20 rounded-lg backdrop-blur-sm border border-white/5">
+                    <div className="mt-1 ml-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700 space-y-1">
                       {item.children.map((child) => (
                         <NavLink
                           key={child.name}
                           to={child.path}
                           end={!!child.exact}
+                          onClick={() => onMobileToggle?.(false)}
                           className={({ isActive }) =>
-                            `flex items-center gap-2 px-3 py-2.5 text-sm rounded-lg transition-all hover:bg-white/10 text-gray-400 hover:text-gray-200 ${
-                              isActive ? "bg-gradient-to-r from-blue-600 to-emerald-600 text-white shadow-lg font-medium" : ""
-                            }`
+                            cn(
+                              "flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",
+                              isActive
+                                ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium"
+                                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                            )
                           }
                         >
                           <child.icon size={16} />
@@ -471,14 +298,19 @@ const menuItems =
                 <NavLink
                   to={item.path}
                   end={!!item.exact}
+                  onClick={() => onMobileToggle?.(false)}
                   className={({ isActive }) =>
-                    `group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 backdrop-blur-sm text-gray-300 transition-all text-sm ${
-                      collapsed ? "justify-center" : ""
-                    } ${isActive ? "bg-gradient-to-r from-blue-600 to-emerald-600 text-white shadow-lg font-medium border border-blue-500/30" : ""}`
+                    cn(
+                      "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                      collapsed ? "justify-center" : "",
+                      isActive
+                        ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                    )
                   }
                 >
-                  <item.icon size={18} className={`${!collapsed ? '' : ''}`} />
-                  {!collapsed && <span className="font-medium">{item.name}</span>}
+                  <item.icon size={18} />
+                  {!collapsed && <span>{item.name}</span>}
                 </NavLink>
               )}
             </div>
@@ -486,44 +318,43 @@ const menuItems =
         </nav>
 
         {/* User Info & Logout */}
-        <div className="relative p-4 border-t border-blue-500/20">
-          {/* Decorative gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-emerald-500/10 to-blue-500/10 pointer-events-none"></div>
-
+        <div className="p-3 border-t border-gray-200 dark:border-gray-800">
           {!collapsed && user && (
-            <div className="relative flex items-center gap-3 px-3 py-3 mb-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-white text-sm font-bold shadow-lg">
+            <div className="flex items-center gap-3 px-3 py-2 mb-2 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                 {user.name?.charAt(0).toUpperCase() || "U"}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">
+                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                   {user.name || "User"}
                 </p>
-                <p className="text-xs text-emerald-400 capitalize truncate font-medium">
+                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize truncate">
                   {role}
                 </p>
               </div>
             </div>
           )}
 
-          <Button
-            variant="ghost"
-            className="relative w-full flex items-center justify-center gap-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer text-sm rounded-xl backdrop-blur-sm border border-transparent hover:border-red-500/30"
+          <button
             onClick={() => {
               localStorage.clear();
               window.location.href = "/";
             }}
+            className={cn(
+              "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors",
+              collapsed ? "justify-center" : ""
+            )}
           >
-            <LogOut size={16} />
-            {!collapsed && <span className="font-medium">Logout</span>}
-          </Button>
+            <LogOut size={18} />
+            {!collapsed && <span>Logout</span>}
+          </button>
         </div>
       </aside>
 
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-gradient-to-br from-slate-900/60 via-blue-900/50 to-slate-900/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => onMobileToggle?.(false)}
         />
       )}
