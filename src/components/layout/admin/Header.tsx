@@ -164,7 +164,7 @@ const Header = ({ onMenuClick, onCustomizerOpen }: HeaderProps) => {
           {/* Dark mode toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-lg text-gray-500 hover:text-primary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover-glow-primary-subtle"
             aria-pressed={isDark}
             aria-label="Toggle dark mode"
           >
@@ -174,11 +174,11 @@ const Header = ({ onMenuClick, onCustomizerOpen }: HeaderProps) => {
           {/* Theme Customizer toggle */}
           <button
             onClick={onCustomizerOpen}
-            className="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-lg text-gray-500 hover:text-primary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover-glow-primary-subtle"
             aria-label="Open theme customizer"
             title="Theme Customizer"
           >
-            <Palette size={18} />
+            <Palette size={18} className="icon-primary" />
           </button>
 
           {/* Notifications */}

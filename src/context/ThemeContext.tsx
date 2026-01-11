@@ -177,6 +177,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       root.style.setProperty(`--color-primary-${shade}`, value);
     });
 
+    // Set RGB value for glow effects
+    const r = parseInt(colorValue.slice(1, 3), 16);
+    const g = parseInt(colorValue.slice(3, 5), 16);
+    const b = parseInt(colorValue.slice(5, 7), 16);
+    root.style.setProperty('--color-primary-rgb', `${r}, ${g}, ${b}`);
+
     // Save to localStorage
     localStorage.setItem('theme-settings', JSON.stringify(settings));
   }, [settings, resolvedTheme]);

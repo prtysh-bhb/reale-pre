@@ -210,7 +210,7 @@ const AdminSidebar = ({
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-800">
           {!collapsed && (
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center hover-glow-primary">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -248,15 +248,18 @@ const AdminSidebar = ({
                   <button
                     onClick={() => toggleDropdown(item.name)}
                     className={cn(
-                      "group flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                      "group flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
                       collapsed ? "justify-center" : "",
                       openDropdown === item.name
-                        ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        ? "bg-primary-50 text-primary hover-glow-primary-subtle"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
                     )}
                   >
                     <div className="flex items-center gap-3">
-                      <item.icon size={18} className={openDropdown === item.name ? "text-primary-500" : ""} />
+                      <item.icon size={18} className={cn(
+                        "transition-all duration-200",
+                        openDropdown === item.name ? "text-primary icon-primary" : "group-hover:text-primary"
+                      )} />
                       {!collapsed && <span>{item.name}</span>}
                     </div>
                     {!collapsed && (
@@ -264,14 +267,14 @@ const AdminSidebar = ({
                         size={16}
                         className={cn(
                           "transition-transform duration-200",
-                          openDropdown === item.name ? "rotate-180" : ""
+                          openDropdown === item.name ? "rotate-180 text-primary" : ""
                         )}
                       />
                     )}
                   </button>
 
                   {!collapsed && openDropdown === item.name && (
-                    <div className="mt-1 ml-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700 space-y-1">
+                    <div className="mt-1 ml-4 pl-4 border-l-2 border-primary-200 space-y-1">
                       {item.children.map((child) => (
                         <NavLink
                           key={child.name}
@@ -280,15 +283,22 @@ const AdminSidebar = ({
                           onClick={() => onMobileToggle?.(false)}
                           className={({ isActive }) =>
                             cn(
-                              "flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",
+                              "group flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200",
                               isActive
-                                ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium"
-                                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                                ? "bg-primary-50 text-primary font-medium active-glow-primary"
+                                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary"
                             )
                           }
                         >
-                          <child.icon size={16} />
-                          <span>{child.name}</span>
+                          {({ isActive }) => (
+                            <>
+                              <child.icon size={16} className={cn(
+                                "transition-all duration-200",
+                                isActive ? "text-primary icon-primary" : "group-hover:text-primary"
+                              )} />
+                              <span>{child.name}</span>
+                            </>
+                          )}
                         </NavLink>
                       ))}
                     </div>
@@ -301,16 +311,23 @@ const AdminSidebar = ({
                   onClick={() => onMobileToggle?.(false)}
                   className={({ isActive }) =>
                     cn(
-                      "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                      "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
                       collapsed ? "justify-center" : "",
                       isActive
-                        ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
-                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                        ? "bg-primary-50 text-primary active-glow-primary"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary"
                     )
                   }
                 >
-                  <item.icon size={18} />
-                  {!collapsed && <span>{item.name}</span>}
+                  {({ isActive }) => (
+                    <>
+                      <item.icon size={18} className={cn(
+                        "transition-all duration-200",
+                        isActive ? "text-primary icon-primary" : "group-hover:text-primary"
+                      )} />
+                      {!collapsed && <span>{item.name}</span>}
+                    </>
+                  )}
                 </NavLink>
               )}
             </div>
@@ -321,7 +338,7 @@ const AdminSidebar = ({
         <div className="p-3 border-t border-gray-200 dark:border-gray-800">
           {!collapsed && user && (
             <div className="flex items-center gap-3 px-3 py-2 mb-2 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+              <div className="w-9 h-9 rounded-full bg-gradient-primary flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                 {user.name?.charAt(0).toUpperCase() || "U"}
               </div>
               <div className="flex-1 min-w-0">

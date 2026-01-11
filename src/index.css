@@ -20,6 +20,154 @@
   --color-primary-800: hsl(217, 70%, 35%);
   --color-primary-900: hsl(217, 65%, 25%);
   --color-primary-950: hsl(217, 60%, 15%);
+
+  /* Primary color RGB for glow effects */
+  --color-primary-rgb: 59, 130, 246;
+}
+
+/* ===== PRIMARY COLOR UTILITY CLASSES ===== */
+/* Text colors */
+.text-primary {
+  color: var(--color-primary-500);
+}
+
+.text-primary-light {
+  color: var(--color-primary-400);
+}
+
+.text-primary-dark {
+  color: var(--color-primary-600);
+}
+
+/* Background colors */
+.bg-primary {
+  background-color: var(--color-primary-500);
+}
+
+.bg-primary-50 {
+  background-color: var(--color-primary-50);
+}
+
+.bg-primary-100 {
+  background-color: var(--color-primary-100);
+}
+
+.bg-primary-500 {
+  background-color: var(--color-primary-500);
+}
+
+.bg-primary-600 {
+  background-color: var(--color-primary-600);
+}
+
+/* Border colors */
+.border-primary {
+  border-color: var(--color-primary-500);
+}
+
+.border-primary-200 {
+  border-color: var(--color-primary-200);
+}
+
+/* Ring/outline colors */
+.ring-primary {
+  --tw-ring-color: var(--color-primary-500);
+}
+
+.ring-primary-500 {
+  --tw-ring-color: var(--color-primary-500);
+}
+
+/* ===== HOVER GLOW EFFECTS ===== */
+.hover-glow-primary {
+  transition: all 0.3s ease;
+}
+
+.hover-glow-primary:hover {
+  box-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.4),
+              0 0 40px rgba(var(--color-primary-rgb), 0.2);
+}
+
+/* Subtle glow for icons and small elements */
+.hover-glow-primary-subtle {
+  transition: all 0.2s ease;
+}
+
+.hover-glow-primary-subtle:hover {
+  box-shadow: 0 0 12px rgba(var(--color-primary-rgb), 0.35);
+  color: var(--color-primary-500);
+}
+
+/* Icon glow effect */
+.icon-primary {
+  color: var(--color-primary-500);
+  transition: all 0.2s ease;
+}
+
+.icon-primary:hover {
+  filter: drop-shadow(0 0 6px rgba(var(--color-primary-rgb), 0.5));
+}
+
+/* Button with primary glow */
+.btn-primary-glow {
+  background-color: var(--color-primary-500);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-primary-glow:hover {
+  background-color: var(--color-primary-600);
+  box-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.5),
+              0 4px 15px rgba(var(--color-primary-rgb), 0.3);
+  transform: translateY(-1px);
+}
+
+/* Card with primary border glow on hover */
+.card-glow-primary {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.card-glow-primary:hover {
+  border-color: var(--color-primary-300);
+  box-shadow: 0 0 25px rgba(var(--color-primary-rgb), 0.15),
+              0 4px 20px rgba(var(--color-primary-rgb), 0.1);
+}
+
+/* Active/selected state with glow */
+.active-glow-primary {
+  background-color: var(--color-primary-50);
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+}
+
+.dark .active-glow-primary {
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+}
+
+/* Focus glow for inputs */
+.focus-glow-primary:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2),
+              0 0 15px rgba(var(--color-primary-rgb), 0.1);
+}
+
+/* Gradient backgrounds using primary color */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+}
+
+.bg-gradient-primary-light {
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-primary-100));
+}
+
+/* Text gradient with primary color */
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ===== SKIN STYLES ===== */

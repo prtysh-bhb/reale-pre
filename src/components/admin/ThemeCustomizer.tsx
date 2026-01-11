@@ -107,14 +107,22 @@ export const ThemeCustomizer = ({ open, onClose }: ThemeCustomizerProps) => {
                     className={cn(
                       "w-8 h-8 rounded-lg transition-all flex items-center justify-center",
                       settings.primaryColor === colorKey
-                        ? "ring-2 ring-offset-2 ring-gray-400 dark:ring-gray-500 dark:ring-offset-gray-900"
-                        : "hover:scale-110"
+                        ? "ring-2 ring-offset-2 ring-offset-white dark:ring-offset-gray-900 scale-110"
+                        : "hover:scale-110 hover:shadow-lg"
                     )}
-                    style={{ backgroundColor: PRIMARY_COLORS[colorKey].value }}
+                    style={{
+                      backgroundColor: PRIMARY_COLORS[colorKey].value,
+                      boxShadow: settings.primaryColor === colorKey
+                        ? `0 0 15px ${PRIMARY_COLORS[colorKey].value}80`
+                        : undefined,
+                      ringColor: settings.primaryColor === colorKey
+                        ? PRIMARY_COLORS[colorKey].value
+                        : undefined,
+                    }}
                     title={PRIMARY_COLORS[colorKey].name}
                   >
                     {settings.primaryColor === colorKey && (
-                      <Check size={14} className="text-white" />
+                      <Check size={14} className="text-white drop-shadow-md" />
                     )}
                   </button>
                 ))}
@@ -130,17 +138,22 @@ export const ThemeCustomizer = ({ open, onClose }: ThemeCustomizerProps) => {
                     className={cn(
                       "w-8 h-8 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 transition-all",
                       settings.primaryColor === "custom"
-                        ? "ring-2 ring-offset-2 ring-gray-400 dark:ring-gray-500 dark:ring-offset-gray-900"
-                        : "hover:border-gray-400 dark:hover:border-gray-500"
+                        ? "ring-2 ring-offset-2 ring-offset-white dark:ring-offset-gray-900 scale-110"
+                        : "hover:border-gray-400 dark:hover:border-gray-500 hover:scale-110"
                     )}
                     style={
                       settings.primaryColor === "custom"
-                        ? { backgroundColor: settings.customColor, borderStyle: "solid" }
+                        ? {
+                            backgroundColor: settings.customColor,
+                            borderStyle: "solid",
+                            borderColor: settings.customColor,
+                            boxShadow: `0 0 15px ${settings.customColor}80`,
+                          }
                         : {}
                     }
                   >
                     {settings.primaryColor === "custom" ? (
-                      <Check size={14} className="text-white" />
+                      <Check size={14} className="text-white drop-shadow-md" />
                     ) : (
                       <Paintbrush size={14} className="text-gray-400" />
                     )}
@@ -328,7 +341,7 @@ const Section = ({
   children: React.ReactNode;
 }) => (
   <div className="space-y-4">
-    <div className="inline-flex px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-xs font-semibold">
+    <div className="inline-flex px-3 py-1 rounded-full bg-primary-50 text-primary text-xs font-semibold">
       {title}
     </div>
     {children}
@@ -352,9 +365,9 @@ const ThemeModeButton = ({
   <button
     onClick={onClick}
     className={cn(
-      "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all",
+      "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all hover-glow-primary-subtle",
       current === mode
-        ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
+        ? "border-primary bg-primary-50 active-glow-primary"
         : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
     )}
   >
@@ -362,7 +375,7 @@ const ThemeModeButton = ({
       size={20}
       className={cn(
         current === mode
-          ? "text-primary-600 dark:text-primary-400"
+          ? "text-primary icon-primary"
           : "text-gray-500 dark:text-gray-400"
       )}
     />
@@ -370,7 +383,7 @@ const ThemeModeButton = ({
       className={cn(
         "text-xs font-medium",
         current === mode
-          ? "text-primary-600 dark:text-primary-400"
+          ? "text-primary"
           : "text-gray-600 dark:text-gray-400"
       )}
     >
@@ -394,9 +407,9 @@ const SkinButton = ({
   <button
     onClick={onClick}
     className={cn(
-      "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all",
+      "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all hover-glow-primary-subtle",
       current === skin
-        ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
+        ? "border-primary bg-primary-50 active-glow-primary"
         : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
     )}
   >
@@ -421,7 +434,7 @@ const SkinButton = ({
       className={cn(
         "text-xs font-medium",
         current === skin
-          ? "text-primary-600 dark:text-primary-400"
+          ? "text-primary"
           : "text-gray-600 dark:text-gray-400"
       )}
     >
@@ -447,9 +460,9 @@ const LayoutButton = <T extends string>({
   <button
     onClick={onClick}
     className={cn(
-      "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all",
+      "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all hover-glow-primary-subtle",
       current === value
-        ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
+        ? "border-primary bg-primary-50 active-glow-primary"
         : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
     )}
   >
@@ -457,7 +470,7 @@ const LayoutButton = <T extends string>({
       className={cn(
         "w-12 h-8 rounded border flex items-center overflow-hidden",
         current === value
-          ? "border-primary-300 dark:border-primary-600"
+          ? "border-primary-200"
           : "border-gray-200 dark:border-gray-600"
       )}
     >
@@ -466,7 +479,7 @@ const LayoutButton = <T extends string>({
           className={cn(
             "h-2 w-full",
             current === value
-              ? "bg-primary-200 dark:bg-primary-700"
+              ? "bg-primary-100"
               : "bg-gray-200 dark:bg-gray-600"
           )}
         />
@@ -475,7 +488,7 @@ const LayoutButton = <T extends string>({
             className={cn(
               "w-3 h-full",
               current === value
-                ? "bg-primary-100 dark:bg-primary-800"
+                ? "bg-primary-50"
                 : "bg-gray-100 dark:bg-gray-700"
             )}
           />
@@ -487,7 +500,7 @@ const LayoutButton = <T extends string>({
       className={cn(
         "text-xs font-medium text-center leading-tight",
         current === value
-          ? "text-primary-600 dark:text-primary-400"
+          ? "text-primary"
           : "text-gray-600 dark:text-gray-400"
       )}
     >
@@ -509,8 +522,8 @@ const ToggleSwitch = ({
     aria-checked={checked}
     onClick={() => onChange(!checked)}
     className={cn(
-      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-      checked ? "bg-primary-500" : "bg-gray-200 dark:bg-gray-700"
+      "relative inline-flex h-6 w-11 items-center rounded-full transition-all",
+      checked ? "bg-primary hover-glow-primary" : "bg-gray-200 dark:bg-gray-700"
     )}
   >
     <span
