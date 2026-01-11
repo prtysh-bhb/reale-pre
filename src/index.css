@@ -6,6 +6,76 @@
 /* Enable class-based dark mode */
 @variant dark (&:where(.dark, .dark *));
 
+/* ===== CSS VARIABLES FOR THEMING ===== */
+:root {
+  /* Default primary color (blue) */
+  --color-primary-50: hsl(217, 100%, 97%);
+  --color-primary-100: hsl(217, 96%, 90%);
+  --color-primary-200: hsl(217, 94%, 80%);
+  --color-primary-300: hsl(217, 92%, 70%);
+  --color-primary-400: hsl(217, 90%, 60%);
+  --color-primary-500: hsl(217, 85%, 50%);
+  --color-primary-600: hsl(217, 80%, 45%);
+  --color-primary-700: hsl(217, 75%, 40%);
+  --color-primary-800: hsl(217, 70%, 35%);
+  --color-primary-900: hsl(217, 65%, 25%);
+  --color-primary-950: hsl(217, 60%, 15%);
+}
+
+/* ===== SKIN STYLES ===== */
+/* Default skin */
+[data-skin="default"] {
+  --card-bg: white;
+  --card-border: transparent;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.dark[data-skin="default"],
+[data-skin="default"].dark {
+  --card-bg: rgb(17 24 39);
+  --card-border: transparent;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+}
+
+/* Bordered skin */
+[data-skin="bordered"] {
+  --card-bg: white;
+  --card-border: rgb(229 231 235);
+  --card-shadow: none;
+}
+
+.dark[data-skin="bordered"],
+[data-skin="bordered"].dark {
+  --card-bg: rgb(17 24 39);
+  --card-border: rgb(55 65 81);
+  --card-shadow: none;
+}
+
+/* ===== SEMI-DARK SIDEBAR ===== */
+[data-semi-dark="true"] .admin-sidebar {
+  --sidebar-bg: rgb(17 24 39);
+  --sidebar-text: rgb(229 231 235);
+  --sidebar-hover: rgb(31 41 55);
+}
+
+/* ===== CONTENT WIDTH ===== */
+[data-content-width="compact"] .admin-content {
+  max-width: 1280px;
+}
+
+[data-content-width="wide"] .admin-content {
+  max-width: 1600px;
+}
+
+/* ===== RTL SUPPORT ===== */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .rtl\:flip {
+  transform: scaleX(-1);
+}
+
 @layer base {
   html {
     @apply antialiased;

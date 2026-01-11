@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Moon, Sun, Search, Menu, User, Pencil, LogOut, Settings, X, CreditCard, ChevronDown } from "lucide-react";
+import { Moon, Sun, Search, Menu, User, Pencil, LogOut, Settings, X, CreditCard, ChevronDown, Palette } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { logout } from "@/api/auth";
@@ -11,11 +11,12 @@ import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   onMenuClick?: () => void;
+  onCustomizerOpen?: () => void;
 }
 
-const Header = ({ onMenuClick }: HeaderProps) => {
+const Header = ({ onMenuClick, onCustomizerOpen }: HeaderProps) => {
   const { user } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const { resolvedTheme, toggleTheme } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -26,7 +27,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
 
   const avatarUrl = user?.avatar_url || "/default-avatar.png";
   const role = user?.role || "customer";
-  const isDark = theme === 'dark';
+  const isDark = resolvedTheme === 'dark';
 
   const profilePathMap: Record<string, string> = {
     admin: "/admin/profile",
@@ -168,6 +169,16 @@ const Header = ({ onMenuClick }: HeaderProps) => {
             aria-label="Toggle dark mode"
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
+          {/* Theme Customizer toggle */}
+          <button
+            onClick={onCustomizerOpen}
+            className="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="Open theme customizer"
+            title="Theme Customizer"
+          >
+            <Palette size={18} />
           </button>
 
           {/* Notifications */}

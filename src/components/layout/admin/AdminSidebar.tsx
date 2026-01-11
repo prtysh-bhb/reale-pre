@@ -33,21 +33,21 @@ import {
   ScrollText,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 
 interface AdminSidebarProps {
   collapsed?: boolean;
   mobileOpen?: boolean;
-  onCollapseChange?: (val: boolean) => void;
   onMobileToggle?: (val: boolean) => void;
 }
 
 const AdminSidebar = ({
   collapsed = false,
   mobileOpen = false,
-  onCollapseChange,
   onMobileToggle,
 }: AdminSidebarProps) => {
+  const { updateSettings } = useTheme();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const location = useLocation();
 
@@ -224,7 +224,7 @@ const AdminSidebar = ({
 
           <div className="flex items-center gap-1">
             <button
-              onClick={() => onCollapseChange?.(!collapsed)}
+              onClick={() => updateSettings({ menuState: collapsed ? "expanded" : "collapsed" })}
               className="hidden lg:flex p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
